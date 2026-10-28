@@ -1,0 +1,32 @@
+{
+  "name": "qq-bridge-cover",
+  "version": "0.2.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node ui-server.mjs",
+    "start:ui": "node ui-server.mjs",
+    "start:mcp": "node mcp-cover.mjs",
+    "login": "node login-server.mjs",
+    "test": "node --test test-core.mjs test-queue.mjs test-bridge-access.mjs test-settings.mjs",
+    "test:installed": "node test-mcp.mjs",
+    "package": "node scripts/package.mjs"
+  },
+  "dependencies": {
+    "@neteasecloudmusicapienhanced/api": "4.41.1",
+    "@modelcontextprotocol/sdk": "1.30.0",
+    "zod": "4.4.3"
+  },
+  "description": "Local NetEase → UVR → RVC short-cover pipeline with its own settings UI and QQ-Bridge MCP tools",
+  "license": "MIT",
+  "engines": {
+    "node": ">=22.13.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rainyaesc/qq-bridge-cover.git"
+  },
+  "bugs": {
+    "url": "https://github.com/rainyaesc/qq-bridge-cover/issues"
+  }
+}

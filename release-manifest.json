@@ -1,0 +1,10 @@
+{
+  "files": [
+    ".gitignore", ".github/workflows/ci.yml", "LICENSE", "README.md", "THIRD_PARTY_NOTICES.md",
+    "package.json", "package-lock.json", "config.example.json", "release-manifest.json", "Start-UI.cmd", "Start-Login.cmd",
+    "bridge-access.mjs", "cover-cli.mjs", "cover-core.mjs", "cover-queue.mjs", "ensure-ui.mjs", "login-server.mjs", "mcp-cover.mjs", "mdx_separate.py", "netease.mjs", "render-params.mjs", "settings.mjs", "ui-server.mjs",
+    "tools/rvc_infer.py", "scripts/setup.mjs", "scripts/integrate.mjs", "scripts/package.mjs",
+    "test-core.mjs", "test-queue.mjs", "test-bridge-access.mjs", "test-settings.mjs", "test-mcp.mjs",
+    "web/index.html", "web/app.js", "web/styles.css"
+  ]
+}

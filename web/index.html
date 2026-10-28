@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f5f7fa">
+  <title>翻唱工作台</title>
+  <link rel="stylesheet" href="/styles.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <a class="brand" href="/" aria-label="翻唱工作台首页"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span>翻唱工作台<small>COVER WORKSPACE</small></span></a>
+      <div class="sidebar-label">工作设置</div>
+      <nav class="navigation" aria-label="设置分类">
+        <button type="button" class="nav-item active" data-tab="clip" aria-controls="panel-clip" aria-selected="true"><span class="nav-symbol" aria-hidden="true">◷</span>默认片段<span class="nav-arrow" aria-hidden="true">›</span></button>
+        <button type="button" class="nav-item" data-tab="uvr" aria-controls="panel-uvr" aria-selected="false"><span class="nav-symbol" aria-hidden="true">≋</span>人声分离 UVR<span class="nav-arrow" aria-hidden="true">›</span></button>
+        <button type="button" class="nav-item" data-tab="rvc" aria-controls="panel-rvc" aria-selected="false"><span class="nav-symbol" aria-hidden="true">♧</span>音色转换 RVC<span class="nav-arrow" aria-hidden="true">›</span></button>
+        <button type="button" class="nav-item" data-tab="mix" aria-controls="panel-mix" aria-selected="false"><span class="nav-symbol" aria-hidden="true">☷</span>混音与输出<span class="nav-arrow" aria-hidden="true">›</span></button>
+      </nav>
+      <div class="sidebar-bottom"><span class="small-dot"></span>本地项目设置<a href="/api/docs" target="_blank" rel="noopener">项目 API 说明 <span aria-hidden="true">↗</span></a></div>
+    </aside>
+    <main class="main">
+      <header class="page-header"><div><div class="eyebrow">工作空间 / 参数设置</div><h1>翻唱设置</h1><p>保存后用于下一次翻唱，正在运行的任务不受影响。</p></div><span class="header-tag">本地工作台</span></header>
+      <div id="notice" class="notice" role="alert" hidden></div>
+      <div class="workspace">
+        <div class="settings-column">
+          <form id="settings-form" novalidate aria-label="翻唱参数设置">
+            <div id="loading" class="loading"><span class="spinner" aria-hidden="true"></span>正在读取工作台设置…</div>
+            <div id="panels" hidden></div>
+            <div class="save-bar"><div class="save-status" id="save-status" role="status" aria-live="polite">正在连接…</div><div class="save-actions"><button id="restore" class="button button-quiet" type="button" disabled>恢复推荐值</button><button id="save" class="button button-primary" type="submit" disabled>保存设置 <span aria-hidden="true">↗</span></button></div></div>
+          </form>
+          <div class="workflow-note"><span aria-hidden="true">↳</span><p>歌曲片段 <b>→</b> UVR 分离 <b>→</b> RVC 转换 <b>→</b> 混音输出<small>调整这里的默认参数，然后通过现有翻唱入口发起任务。</small></p></div>
+        </div>
+        <aside class="context-column" aria-label="工作台状态">
+          <section class="card health-card"><div class="card-header"><h2>环境状态</h2><button id="check" class="text-button" type="button" disabled>重新检测 <span aria-hidden="true">↻</span></button></div><div id="health" class="health-list"><p class="muted">等待读取环境状态</p></div><div class="card-footer">手动检测连接状态，不会自动反复请求。</div></section>
+          <section class="card jobs-card"><div class="card-header"><h2>近期任务 <span id="job-count" class="count"></span></h2><button id="refresh-jobs" class="text-button" type="button" disabled>刷新 <span aria-hidden="true">↻</span></button></div><div id="jobs" class="jobs-list"><p class="empty">正在准备读取任务…</p></div><div id="jobs-time" class="card-footer">任务状态按需刷新</div></section>
+        </aside>
+      </div>
+      <footer class="page-footer">COVER WORKSPACE <span>参数将在下一次任务中应用</span></footer>
+    </main>
+  </div>
+</body>
+</html>

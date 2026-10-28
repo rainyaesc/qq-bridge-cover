@@ -1,0 +1,14 @@
+import fs from 'node:fs';import path from 'node:path';import {parseArgs} from 'node:util';import {spawnSync} from 'node:child_process';import {createHash} from 'node:crypto';
+import {ROOT,PARAM_DEFAULTS,catalogFor} from '../settings.mjs';
+const {values:o}=parseArgs({options:{'rvc-root':{type:'string'},'uvr-root':{type:'string'},'bridge-root':{type:'string'},voice:{type:'string'},python:{type:'string'}}});
+try{
+ if(!o['rvc-root']||!o['uvr-root']||!o['bridge-root']||!o.voice)throw Error('Usage: node scripts/setup.mjs --rvc-root <RVC> --uvr-root <UVR> --bridge-root <QQ-Bridge> --voice <model.pth>');
+ if(path.basename(o.voice)!==o.voice||!o.voice.endsWith('.pth'))throw Error('Voice must be a .pth filename inside assets/weights');
+ const file=path.join(ROOT,'config.local.json');if(fs.existsSync(file))throw Error('config.local.json already exists; use the UI or edit it after making a backup');
+ const rvc=path.resolve(o['rvc-root']),uvr=path.resolve(o['uvr-root']),bridge=path.resolve(o['bridge-root']);const bc=JSON.parse(fs.readFileSync(path.join(bridge,'config.json'),'utf8'));
+ const c={...PARAM_DEFAULTS,enabled:true,uiPort:3119,bridgeBase:`http://127.0.0.1:${Number(bc.consolePort)||3100}`,bridgeConfig:path.join(bridge,'config.json'),voiceLibrary:path.resolve(bridge,bc.socialV2?.voice?.dir||'audio'),rvcRoot:rvc,python:o.python?path.resolve(o.python):path.join(rvc,'runtime','python.exe'),rvcModel:path.join(rvc,'assets','weights',o.voice),voiceId:path.basename(o.voice,'.pth'),rvcIndex:'',uvrModel:path.join(uvr,'models','MDX_Net_Models','UVR-MDX-NET-Inst_HQ_3.onnx'),uvrMetadata:path.join(uvr,'models','MDX_Net_Models','model_data','model_data.json'),stageTimeoutMs:300000};
+ for(const p of [c.python,c.rvcScript,c.rvcModel,c.uvrModel,c.uvrMetadata,path.join(rvc,'ffmpeg.exe'),path.join(rvc,'ffprobe.exe')])if(!fs.existsSync(p))throw Error(`Required component is missing: ${path.basename(p)}`);
+ if(!catalogFor(c).uvr.find(m=>m.path===c.uvrModel&&m.available))throw Error('HQ3 does not match the installed UVR metadata');
+ if(process.platform==='win32'){const sid=spawnSync(path.join(process.env.SystemRoot||'C:/Windows','System32/WindowsPowerShell/v1.0/powershell.exe'),['-NoProfile','-NonInteractive','-Command','[Console]::Out.Write([Security.Principal.WindowsIdentity]::GetCurrent().User.Value)'],{encoding:'utf8',windowsHide:true,timeout:10000});if(sid.status!==0)throw Error('Could not verify Windows credential context');c.credentialOwnerSidHash=createHash('sha256').update(sid.stdout.trim()).digest('hex');}
+ fs.mkdirSync(path.join(ROOT,'data'),{recursive:true});fs.writeFileSync(file,JSON.stringify(c,null,2)+'\n',{flag:'wx'});console.log('Local configuration created. Run npm run login under the same Windows account as DSH, then integrate the MCP tools.');
+}catch(e){console.error(e.message);process.exitCode=1;}
